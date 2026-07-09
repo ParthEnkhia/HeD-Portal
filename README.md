@@ -83,3 +83,17 @@ Health check: /api/health
 Set `NODE_ENV=production`, `MONGO_URI`, `MONGO_DB_NAME`, `JWT_SECRET`, and
 `ADMIN_SIGNUP_KEY`. `JWT_SECRET` must contain at least 32 characters and
 `ADMIN_SIGNUP_KEY` must contain at least 12 characters.
+
+### Deploy on Vercel
+
+The included `vercel.json` builds the Vite frontend and exposes Express through
+Vercel Functions. Add these variables in Project Settings, then redeploy:
+
+```text
+MONGO_URI
+MONGO_DB_NAME
+JWT_SECRET
+ADMIN_SIGNUP_KEY
+```
+
+MongoDB Atlas Network Access must also allow connections from Vercel.
