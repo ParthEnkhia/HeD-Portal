@@ -25,21 +25,30 @@ const sendAuthResponse = (res, user) => {
 
 router.post("/signup", async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, adminSignupKey } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Name, email, and password are required" });
     }
 
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(409).json({ message: "Email is already registered" });
     }
 
     const normalizedRole = role === "admin" ? "admin" : "employee";
+    if (
+      normalizedRole === "admin" &&
+      (!process.env.ADMIN_SIGNUP_KEY ||
+        adminSignupKey !== process.env.ADMIN_SIGNUP_KEY)
+    ) {
+      return res.status(403).json({ message: "Invalid admin signup key" });
+    }
+
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
       password,
       role: normalizedRole,
       accountStatus: normalizedRole === "admin" ? "approved" : "pending"

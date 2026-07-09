@@ -8,7 +8,13 @@ const frontendDist = fileURLToPath(new URL("./dist", import.meta.url));
 export default defineConfig({
   root: frontendRoot,
   plugins: [react()],
+  server: {
+    proxy: {
+      "/api": "http://localhost:5000"
+    }
+  },
   build: {
-    outDir: frontendDist
+    outDir: frontendDist,
+    emptyOutDir: true
   }
 });

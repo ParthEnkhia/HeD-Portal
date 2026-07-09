@@ -517,7 +517,7 @@ const AccountProfileDialog = ({ isAdmin, onClose, user }) => {
     <div
       aria-labelledby="account-profile-title"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/60 p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -526,21 +526,21 @@ const AccountProfileDialog = ({ isAdmin, onClose, user }) => {
       role="dialog"
     >
       <section className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white shadow-xl">
-        <div className="flex items-start justify-between border-b border-slate-200 p-5">
+        <div className="flex items-start justify-between border-b border-brand-line p-5">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-800">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-blush text-brand-coral">
               {isAdmin ? <ShieldCheck size={23} /> : <UserRound size={23} />}
             </div>
             <div className="min-w-0">
               <h2 className="truncate text-lg font-bold" id="account-profile-title">
                 {user.name}
               </h2>
-              <p className="text-sm capitalize text-slate-500">{user.role} account</p>
+              <p className="text-sm capitalize text-brand-muted">{user.role} account</p>
             </div>
           </div>
           <button
             aria-label="Close profile"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-brand-muted transition hover:bg-brand-blush hover:text-brand-coralDark"
             onClick={onClose}
             title="Close profile"
             type="button"
@@ -551,21 +551,21 @@ const AccountProfileDialog = ({ isAdmin, onClose, user }) => {
 
         <div className="space-y-5 p-5">
           <div>
-            <p className="text-xs font-semibold uppercase text-slate-400">Signed in as</p>
-            <p className="mt-2 flex items-center gap-2 break-all text-sm font-medium text-slate-700">
-              <Mail className="shrink-0 text-slate-400" size={17} />
+            <p className="text-xs font-semibold uppercase text-brand-muted">Signed in as</p>
+            <p className="mt-2 flex items-center gap-2 break-all text-sm font-medium text-brand-ink">
+              <Mail className="shrink-0 text-brand-coral" size={17} />
               {user.email}
             </p>
           </div>
 
           {!isAdmin && professionalDetails.length > 0 && (
-            <div className="border-t border-slate-200 pt-5">
-              <h3 className="text-sm font-bold text-slate-900">Professional information</h3>
+            <div className="border-t border-brand-line pt-5">
+              <h3 className="text-sm font-bold text-brand-ink">Professional information</h3>
               <dl className="mt-3 grid gap-4 sm:grid-cols-2">
                 {professionalDetails.map(([label, value]) => (
                   <div key={label}>
-                    <dt className="text-xs font-medium text-slate-400">{label}</dt>
-                    <dd className="mt-1 break-words text-sm font-semibold text-slate-700">
+                    <dt className="text-xs font-medium text-brand-muted">{label}</dt>
+                    <dd className="mt-1 break-words text-sm font-semibold text-brand-ink">
                       {value}
                     </dd>
                   </div>
@@ -575,13 +575,13 @@ const AccountProfileDialog = ({ isAdmin, onClose, user }) => {
           )}
 
           {!isAdmin && professionalDetails.length === 0 && (
-            <p className="border-t border-slate-200 pt-5 text-sm text-slate-500">
+            <p className="border-t border-brand-line pt-5 text-sm text-brand-muted">
               Add your professional information from the profile form on the dashboard.
             </p>
           )}
 
           {!isAdmin && (profile.linkedIn || profile.portfolio) && (
-            <div className="flex flex-wrap gap-2 border-t border-slate-200 pt-5">
+            <div className="flex flex-wrap gap-2 border-t border-brand-line pt-5">
               {profile.linkedIn && <ProfileLink href={profile.linkedIn} label="LinkedIn" />}
               {profile.portfolio && <ProfileLink href={profile.portfolio} label="Portfolio" />}
             </div>
@@ -593,16 +593,16 @@ const AccountProfileDialog = ({ isAdmin, onClose, user }) => {
 };
 
 const EmployeeApprovalPanel = ({ employees, loading, onRefresh, onUpdate }) => (
-  <section className="mt-7 rounded-lg border border-slate-200 bg-white shadow-sm">
-    <div className="flex flex-col gap-3 border-b border-slate-200 p-5 sm:flex-row sm:items-center sm:justify-between">
+  <section className="mt-7 rounded-lg border border-brand-line bg-brand-paper shadow-sm">
+    <div className="flex flex-col gap-3 border-b border-brand-line p-5 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h2 className="text-lg font-bold">Employee account approvals</h2>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-brand-muted">
           Approve new employees before they can access the portal.
         </p>
       </div>
       <button
-        className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700"
+        className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-line px-3 py-2 text-sm font-semibold text-brand-muted transition hover:border-brand-coral hover:text-brand-coral"
         onClick={onRefresh}
         type="button"
       >
@@ -611,11 +611,11 @@ const EmployeeApprovalPanel = ({ employees, loading, onRefresh, onUpdate }) => (
       </button>
     </div>
 
-    <div className="divide-y divide-slate-100">
+    <div className="divide-y divide-brand-line">
       {loading ? (
-        <p className="p-5 text-sm text-slate-500">Loading account requests...</p>
+        <p className="p-5 text-sm text-brand-muted">Loading account requests...</p>
       ) : employees.length === 0 ? (
-        <p className="p-5 text-sm text-slate-500">No employee accounts need review.</p>
+        <p className="p-5 text-sm text-brand-muted">No employee accounts need review.</p>
       ) : (
         employees.map((employee) => (
           <article
@@ -624,7 +624,7 @@ const EmployeeApprovalPanel = ({ employees, loading, onRefresh, onUpdate }) => (
           >
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="font-bold text-slate-950">{employee.name}</h3>
+                <h3 className="font-bold text-brand-ink">{employee.name}</h3>
                 <span
                   className={`rounded-full border px-2.5 py-1 text-xs font-bold capitalize ${
                     employee.accountStatus === "rejected"
@@ -635,15 +635,15 @@ const EmployeeApprovalPanel = ({ employees, loading, onRefresh, onUpdate }) => (
                   {employee.accountStatus}
                 </span>
               </div>
-              <p className="mt-1 break-all text-sm text-slate-500">{employee.email}</p>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 break-all text-sm text-brand-muted">{employee.email}</p>
+              <p className="mt-1 text-xs text-brand-muted">
                 Requested {formatDate(employee.createdAt)}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2">
               <button
-                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-coral px-3 py-2 text-sm font-semibold text-white transition hover:bg-brand-coralDark"
                 onClick={() => onUpdate(employee._id, "approved")}
                 type="button"
               >
@@ -672,7 +672,7 @@ const LeaveRequestRow = ({ request, isAdmin, onStatusChange, onDelete }) => (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-bold text-slate-950">{request.leaveType}</h3>
+          <h3 className="font-bold text-brand-ink">{request.leaveType}</h3>
           <span
             className={`rounded-full border px-2.5 py-1 text-xs font-bold capitalize ${
               statusStyles[request.status]
@@ -681,13 +681,13 @@ const LeaveRequestRow = ({ request, isAdmin, onStatusChange, onDelete }) => (
             {request.status}
           </span>
         </div>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-brand-muted">
           {formatDate(request.startDate)} to {formatDate(request.endDate)}
         </p>
         {isAdmin && (
           <EmployeeProfileSummary employee={request.employee} />
         )}
-        <p className="mt-3 max-w-3xl break-words text-sm leading-6 text-slate-600">
+        <p className="mt-3 max-w-3xl break-words text-sm leading-6 text-brand-muted">
           {request.reason}
         </p>
       </div>
@@ -695,7 +695,7 @@ const LeaveRequestRow = ({ request, isAdmin, onStatusChange, onDelete }) => (
       {isAdmin && (
         <div className="flex flex-wrap gap-2 lg:justify-end">
           <button
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-coral px-3 py-2 text-sm font-semibold text-white transition hover:bg-brand-coralDark"
             onClick={() => onStatusChange(request._id, "accepted")}
             type="button"
           >
@@ -703,7 +703,7 @@ const LeaveRequestRow = ({ request, isAdmin, onStatusChange, onDelete }) => (
             Accept
           </button>
           <button
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-lg border border-brand-line px-3 py-2 text-sm font-semibold text-brand-muted transition hover:border-brand-coral hover:bg-brand-blush"
             onClick={() => onStatusChange(request._id, "ignored")}
             type="button"
           >
@@ -735,11 +735,11 @@ const EmployeeProfileSummary = ({ employee }) => {
 
   return (
     <div className="mt-2 space-y-2">
-      <p className="text-sm font-medium text-slate-700">
-        {employee?.name} <span className="font-normal text-slate-400">({employee?.email})</span>
+      <p className="text-sm font-medium text-brand-ink">
+        {employee?.name} <span className="font-normal text-brand-muted">({employee?.email})</span>
       </p>
       {details.length > 0 && (
-        <p className="text-xs font-medium text-slate-500">{details.join(" - ")}</p>
+        <p className="text-xs font-medium text-brand-muted">{details.join(" - ")}</p>
       )}
       {(profile.linkedIn || profile.portfolio) && (
         <div className="flex flex-wrap gap-2">
@@ -753,7 +753,7 @@ const EmployeeProfileSummary = ({ employee }) => {
 
 const ProfileLink = ({ href, label }) => (
   <a
-    className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-2.5 py-1 text-xs font-semibold text-cyan-700 transition hover:border-cyan-200 hover:bg-cyan-50"
+    className="inline-flex items-center gap-1 rounded-full border border-brand-line px-2.5 py-1 text-xs font-semibold text-brand-coralDark transition hover:border-brand-coral hover:bg-brand-blush"
     href={href}
     rel="noreferrer"
     target="_blank"

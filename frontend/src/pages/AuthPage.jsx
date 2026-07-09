@@ -6,7 +6,8 @@ const initialForm = {
   name: "",
   email: "",
   password: "",
-  role: "employee"
+  role: "employee",
+  adminSignupKey: ""
 };
 
 const AuthPage = () => {
@@ -159,7 +160,6 @@ const AuthPage = () => {
                       <label
                         className={`cursor-pointer rounded-lg border px-3 py-3 text-center text-sm font-semibold capitalize ${
                           form.role === role
-                            ? "border-emerald-500 bg-emerald-50 text-emerald-800"
                             ? "border-brand-coral bg-brand-blush text-brand-coralDark"
                             : "border-brand-line text-brand-muted"
                         }`}
@@ -178,6 +178,23 @@ const AuthPage = () => {
                     ))}
                   </div>
                 </div>
+              )}
+
+              {mode === "signup" && form.role === "admin" && (
+                <label className="block">
+                  <span className="text-sm font-medium text-brand-ink">Admin signup key</span>
+                  <div className="mt-1 flex items-center gap-3 rounded-lg border border-brand-line bg-white px-3 py-2.5 focus-within:border-brand-coral">
+                    <Lock className="text-brand-coral" size={18} />
+                    <input
+                      className="w-full border-0 bg-transparent text-sm outline-none"
+                      name="adminSignupKey"
+                      onChange={updateForm}
+                      placeholder="Provided by your organization"
+                      type="password"
+                      value={form.adminSignupKey}
+                    />
+                  </div>
+                </label>
               )}
 
               {error && (
