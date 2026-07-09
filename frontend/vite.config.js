@@ -1,0 +1,14 @@
+import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vite";
+
+const frontendRoot = fileURLToPath(new URL(".", import.meta.url));
+const frontendDist = fileURLToPath(new URL("./dist", import.meta.url));
+
+export default defineConfig({
+  root: frontendRoot,
+  plugins: [react()],
+  build: {
+    outDir: frontendDist
+  }
+});
