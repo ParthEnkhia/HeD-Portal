@@ -23,6 +23,38 @@ const sendAuthResponse = (res, user) => {
   });
 };
 
+const buildProfileUpdate = (body, canEditRating = false, canEditEmail = false) => {
+  const updates = {};
+
+  if ("name" in body) {
+    updates.name = String(body.name || "").trim();
+  }
+
+  if (canEditEmail && "email" in body) {
+    updates.email = String(body.email || "").trim().toLowerCase();
+  }
+
+  if ("employeeId" in body) {
+    updates["profile.employeeId"] = String(body.employeeId || "").trim();
+  }
+
+  if (canEditRating && "rating" in body) {
+    updates["profile.rating"] = String(body.rating || "").trim();
+  }
+
+  return updates;
+};
+
+const serializeUser = (user) => ({
+  id: user._id,
+  _id: user._id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  accountStatus: user.accountStatus || "approved",
+  profile: user.profile
+});
+
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password, role, adminSignupKey } = req.body;
@@ -41,7 +73,7 @@ router.post("/signup", async (req, res) => {
     if (
       normalizedRole === "admin" &&
       (!process.env.ADMIN_SIGNUP_KEY ||
-        adminSignupKey !== process.env.ADMIN_SIGNUP_KEY)
+        String(adminSignupKey || "").trim() !== process.env.ADMIN_SIGNUP_KEY.trim())
     ) {
       return res.status(403).json({ message: "Invalid admin signup key" });
     }
@@ -94,14 +126,7 @@ router.post("/signin", async (req, res) => {
 });
 
 router.get("/me", protect, (req, res) => {
-  res.json({
-    id: req.user._id,
-    name: req.user.name,
-    email: req.user.email,
-    role: req.user.role,
-    accountStatus: req.user.accountStatus || "approved",
-    profile: req.user.profile
-  });
+  res.json(serializeUser(req.user));
 });
 
 router.get("/employee-approvals", protect, requireRole("admin"), async (_req, res) => {
@@ -112,6 +137,18 @@ router.get("/employee-approvals", protect, requireRole("admin"), async (_req, re
     })
       .select("name email accountStatus createdAt profile")
       .sort({ createdAt: -1 });
+
+    res.json(employees);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/employees", protect, requireRole("admin"), async (_req, res) => {
+  try {
+    const employees = await User.find({ role: "employee" })
+      .select("name email accountStatus createdAt profile")
+      .sort({ name: 1 });
 
     res.json(employees);
   } catch (error) {
@@ -149,42 +186,56 @@ router.put("/profile", protect, async (req, res) => {
       return res.status(403).json({ message: "Only employees can update profile information" });
     }
 
-    const allowedFields = [
-      "employeeId",
-      "department",
-      "designation",
-      "phone",
-      "workLocation",
-      "joiningDate",
-      "managerName",
-      "skills",
-      "linkedIn",
-      "portfolio",
-      "bio"
-    ];
+    const updates = buildProfileUpdate(req.body, false);
 
-    const profile = allowedFields.reduce((nextProfile, field) => {
-      if (field in req.body) {
-        nextProfile[field] = req.body[field] === "" && field === "joiningDate" ? null : req.body[field];
-      }
-
-      return nextProfile;
-    }, {});
+    if (!updates.name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
-      { $set: Object.fromEntries(Object.entries(profile).map(([key, value]) => [`profile.${key}`, value])) },
+      { $set: updates },
       { new: true, runValidators: true }
     ).select("-password");
 
-    res.json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      accountStatus: user.accountStatus || "approved",
-      profile: user.profile
+    res.json(serializeUser(user));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put("/employees/:id/profile", protect, requireRole("admin"), async (req, res) => {
+  try {
+    const updates = buildProfileUpdate(req.body, true, true);
+
+    if (!updates.name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    if (!updates.email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const existingUser = await User.findOne({
+      email: updates.email,
+      _id: { $ne: req.params.id }
     });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Email is already registered" });
+    }
+
+    const employee = await User.findOneAndUpdate(
+      { _id: req.params.id, role: "employee" },
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select("name email accountStatus createdAt profile");
+
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    res.json(employee);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

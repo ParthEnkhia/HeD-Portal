@@ -9,8 +9,8 @@
 body {
   margin: 0;
   min-width: 320px;
-  background: #faf6f3;
-  color: #46464a;
+  background: #0f0e0d;
+  color: #f4f0ec;
   font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -22,6 +22,6 @@ textarea {
 }
 
 ::selection {
-  background: #f3c3ad;
-  color: #46464a;
+  background: #e88964;
+  color: #11100f;
 }

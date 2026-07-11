@@ -1,4 +1,4 @@
-import { Building2, Lock, Mail, UserRound } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -23,6 +23,12 @@ const AuthPage = () => {
       ...current,
       [event.target.name]: event.target.value
     }));
+  };
+
+  const changeMode = (nextMode) => {
+    setMode(nextMode);
+    setError("");
+    setNotice("");
   };
 
   const submitForm = async (event) => {
@@ -52,113 +58,104 @@ const AuthPage = () => {
   };
 
   return (
-    <main className="min-h-screen bg-brand-wash text-brand-ink">
-      <div className="grid min-h-screen lg:grid-cols-[0.95fr_1.05fr]">
-        <section className="flex items-center bg-brand-paper px-6 py-10 sm:px-10 lg:px-14">
-          <div className="max-w-xl">
-            <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-lg border border-brand-line bg-brand-blush text-brand-coral">
-              <Building2 size={28} />
-            </div>
-            <p className="text-sm font-semibold uppercase text-brand-coral">
-              HeD Leave Portal
-            </p>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight text-brand-ink sm:text-5xl">
-              Leave approvals with <span className="italic text-brand-coral">simplicity</span>.
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-brand-muted">
-              Employees can raise requests in seconds, while admins can review, accept,
-              ignore, or delete requests from one focused workspace.
-            </p>
-            <div className="mt-10 h-1 w-24 bg-brand-coral" />
+    <main className="flex min-h-screen flex-col bg-brand-wash text-brand-ink">
+      <header className="border-b border-brand-line bg-brand-paper">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-5 py-4 sm:px-8">
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-brand-coral text-white">
+            <Building2 size={21} />
           </div>
-        </section>
+          <div>
+            <p className="text-sm font-bold text-brand-ink">HeD Leave Portal</p>
+            <p className="text-xs text-brand-muted">Employee management</p>
+          </div>
+        </div>
+      </header>
 
-        <section className="flex items-center justify-center px-5 py-10">
-          <div className="w-full max-w-md rounded-lg border border-brand-line bg-brand-paper p-6 shadow-soft sm:p-8">
-            <div className="mb-6 grid grid-cols-2 rounded-lg bg-brand-wash p-1">
+      <section className="flex flex-1 items-center justify-center px-5 py-10 sm:py-14">
+        <div className="w-full max-w-md">
+          <div className="mb-6 text-center">
+            <h1 className="text-2xl font-bold text-brand-ink">
+              {mode === "signin" ? "Sign in to your account" : "Create an account"}
+            </h1>
+          </div>
+
+          <div className="rounded border border-brand-line bg-brand-paper p-6 shadow-soft sm:p-8">
+            <div className="mb-7 grid grid-cols-2 border-b border-brand-line">
               <button
-                className={`rounded-md px-4 py-2 text-sm font-semibold transition ${
-                  mode === "signin" ? "bg-brand-paper text-brand-ink shadow-sm" : "text-brand-muted"
+                aria-pressed={mode === "signin"}
+                className={`border-b-2 px-4 py-3 text-sm font-semibold transition ${
+                  mode === "signin"
+                    ? "border-brand-coral text-brand-ink"
+                    : "border-transparent text-brand-muted hover:text-brand-ink"
                 }`}
-                onClick={() => setMode("signin")}
+                onClick={() => changeMode("signin")}
                 type="button"
               >
                 Sign in
               </button>
               <button
-                className={`rounded-md px-4 py-2 text-sm font-semibold transition ${
-                  mode === "signup" ? "bg-brand-paper text-brand-ink shadow-sm" : "text-brand-muted"
+                aria-pressed={mode === "signup"}
+                className={`border-b-2 px-4 py-3 text-sm font-semibold transition ${
+                  mode === "signup"
+                    ? "border-brand-coral text-brand-ink"
+                    : "border-transparent text-brand-muted hover:text-brand-ink"
                 }`}
-                onClick={() => setMode("signup")}
+                onClick={() => changeMode("signup")}
                 type="button"
               >
                 Sign up
               </button>
             </div>
 
-            <h2 className="text-2xl font-extrabold text-brand-ink">
-              {mode === "signin" ? "Welcome back" : "Create your account"}
-            </h2>
-            <p className="mt-2 text-sm text-brand-muted">
-              {mode === "signin"
-                ? "Use your registered credentials to continue."
-                : "Choose whether this account is for admin or employee access."}
-            </p>
-
-            <form className="mt-7 space-y-4" onSubmit={submitForm}>
+            <form className="space-y-5" onSubmit={submitForm}>
               {mode === "signup" && (
                 <label className="block">
                   <span className="text-sm font-medium text-brand-ink">Full name</span>
-                  <div className="mt-1 flex items-center gap-3 rounded-lg border border-brand-line bg-white px-3 py-2.5 focus-within:border-brand-coral">
-                    <UserRound className="text-brand-coral" size={18} />
-                    <input
-                      className="w-full border-0 bg-transparent text-sm outline-none"
-                      name="name"
-                      onChange={updateForm}
-                      placeholder="Parth Sharma"
-                      value={form.name}
-                    />
-                  </div>
+                  <input
+                    autoComplete="name"
+                    className="mt-1.5 w-full rounded border border-brand-line bg-brand-input px-3.5 py-3 text-sm outline-none transition focus:border-brand-coral focus:ring-2 focus:ring-brand-blush"
+                    name="name"
+                    onChange={updateForm}
+                    required
+                    value={form.name}
+                  />
                 </label>
               )}
 
               <label className="block">
                 <span className="text-sm font-medium text-brand-ink">Email</span>
-                <div className="mt-1 flex items-center gap-3 rounded-lg border border-brand-line bg-white px-3 py-2.5 focus-within:border-brand-coral">
-                  <Mail className="text-brand-coral" size={18} />
-                  <input
-                    className="w-full border-0 bg-transparent text-sm outline-none"
-                    name="email"
-                    onChange={updateForm}
-                    placeholder="you@company.com"
-                    type="email"
-                    value={form.email}
-                  />
-                </div>
+                <input
+                  autoComplete="email"
+                  className="mt-1.5 w-full rounded border border-brand-line bg-brand-input px-3.5 py-3 text-sm outline-none transition focus:border-brand-coral focus:ring-2 focus:ring-brand-blush"
+                  name="email"
+                  onChange={updateForm}
+                  required
+                  type="email"
+                  value={form.email}
+                />
               </label>
 
               <label className="block">
                 <span className="text-sm font-medium text-brand-ink">Password</span>
-                <div className="mt-1 flex items-center gap-3 rounded-lg border border-brand-line bg-white px-3 py-2.5 focus-within:border-brand-coral">
-                  <Lock className="text-brand-coral" size={18} />
-                  <input
-                    className="w-full border-0 bg-transparent text-sm outline-none"
-                    name="password"
-                    onChange={updateForm}
-                    placeholder="Minimum 6 characters"
-                    type="password"
-                    value={form.password}
-                  />
-                </div>
+                <input
+                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                  className="mt-1.5 w-full rounded border border-brand-line bg-brand-input px-3.5 py-3 text-sm outline-none transition focus:border-brand-coral focus:ring-2 focus:ring-brand-blush"
+                  minLength={6}
+                  name="password"
+                  onChange={updateForm}
+                  required
+                  type="password"
+                  value={form.password}
+                />
               </label>
 
               {mode === "signup" && (
                 <div>
                   <span className="text-sm font-medium text-brand-ink">Account role</span>
-                  <div className="mt-2 grid grid-cols-2 gap-2">
+                  <div className="mt-2 grid grid-cols-2 gap-3">
                     {["employee", "admin"].map((role) => (
                       <label
-                        className={`cursor-pointer rounded-lg border px-3 py-3 text-center text-sm font-semibold capitalize ${
+                        className={`cursor-pointer rounded border px-3 py-3 text-center text-sm font-semibold capitalize transition ${
                           form.role === role
                             ? "border-brand-coral bg-brand-blush text-brand-coralDark"
                             : "border-brand-line text-brand-muted"
@@ -183,34 +180,32 @@ const AuthPage = () => {
               {mode === "signup" && form.role === "admin" && (
                 <label className="block">
                   <span className="text-sm font-medium text-brand-ink">Admin signup key</span>
-                  <div className="mt-1 flex items-center gap-3 rounded-lg border border-brand-line bg-white px-3 py-2.5 focus-within:border-brand-coral">
-                    <Lock className="text-brand-coral" size={18} />
-                    <input
-                      className="w-full border-0 bg-transparent text-sm outline-none"
-                      name="adminSignupKey"
-                      onChange={updateForm}
-                      placeholder="Provided by your organization"
-                      type="password"
-                      value={form.adminSignupKey}
-                    />
-                  </div>
+                  <input
+                    autoComplete="off"
+                    className="mt-1.5 w-full rounded border border-brand-line bg-brand-input px-3.5 py-3 text-sm outline-none transition focus:border-brand-coral focus:ring-2 focus:ring-brand-blush"
+                    name="adminSignupKey"
+                    onChange={updateForm}
+                    required
+                    type="password"
+                    value={form.adminSignupKey}
+                  />
                 </label>
               )}
 
               {error && (
-                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                <div className="rounded border border-red-900/70 bg-red-950/40 px-3 py-2 text-sm text-red-300">
                   {error}
                 </div>
               )}
 
               {notice && (
-                <div className="rounded-lg border border-brand-line bg-brand-blush px-3 py-2 text-sm text-brand-coralDark">
+                <div className="rounded border border-brand-line bg-brand-blush px-3 py-2 text-sm text-brand-coralDark">
                   {notice}
                 </div>
               )}
 
               <button
-                className="w-full rounded-lg bg-brand-coral px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-coralDark disabled:cursor-not-allowed disabled:bg-stone-300"
+                className="w-full rounded bg-brand-coral px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-coralDark focus:outline-none focus:ring-2 focus:ring-brand-coral focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-700"
                 disabled={submitting}
                 type="submit"
               >
@@ -218,8 +213,8 @@ const AuthPage = () => {
               </button>
             </form>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   );
 };

@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema(
         trim: true,
         default: ""
       },
+      rating: {
+        type: String,
+        trim: true,
+        default: ""
+      },
       department: {
         type: String,
         trim: true,
