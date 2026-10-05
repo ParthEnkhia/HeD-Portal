@@ -1,3 +1,4 @@
+import "../backend/env.js";
 import app from "../backend/app.js";
 import { connectDatabase } from "../backend/database.js";
 
