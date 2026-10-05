@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
 const frontendRoot = fileURLToPath(new URL(".", import.meta.url));
-const frontendDist = fileURLToPath(new URL("./dist", import.meta.url));
+const projectDist = fileURLToPath(new URL("../dist", import.meta.url));
 
 export default defineConfig({
   root: frontendRoot,
@@ -14,7 +14,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: frontendDist,
+    outDir: projectDist,
     emptyOutDir: true
   }
 });

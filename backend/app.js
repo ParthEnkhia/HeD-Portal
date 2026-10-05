@@ -7,7 +7,7 @@ import leaveRoutes from "./routes/leaveRoutes.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const frontendDist = path.resolve(__dirname, "../frontend/dist");
+const frontendDist = path.resolve(__dirname, "../dist");
 const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())

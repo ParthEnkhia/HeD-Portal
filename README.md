@@ -55,7 +55,7 @@ The API runs on `http://localhost:5000/api` by default.
 
 The repository is configured as a single deployable Node service. The production build:
 
-- compiles the React frontend into `frontend/dist`;
+- compiles the React frontend into `dist`;
 - serves the SPA and API from the same Express process;
 - uses relative `/api` requests, so no production frontend URL is required;
 - supports client-side routes through an SPA fallback;

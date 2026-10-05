@@ -1,5 +1,5 @@
 node_modules/
 dist/
-.env
+HeD-Portal-2.env
 npm-debug.log*
 .DS_Store
