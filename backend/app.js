@@ -13,10 +13,31 @@ const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+if (process.env.VERCEL_URL) {
+  allowedOrigins.push(`https://${process.env.VERCEL_URL}`);
+}
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) {
+    return true;
+  }
+
+  if (allowedOrigins.includes(origin)) {
+    return true;
+  }
+
+  try {
+    const { hostname } = new URL(origin);
+    return hostname === "localhost" || hostname.endsWith(".vercel.app");
+  } catch (_error) {
+    return false;
+  }
+};
+
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
 
@@ -47,6 +68,16 @@ if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
 
 app.use("/api/*", (_req, res) => {
   res.status(404).json({ message: "API endpoint not found" });
+});
+
+app.use((error, _req, res, next) => {
+  if (error.message === "Origin is not allowed by CORS") {
+    return res.status(403).json({
+      message: "This site is not allowed to call the API. Check CLIENT_URL in deployment settings."
+    });
+  }
+
+  return next(error);
 });
 
 export default app;
